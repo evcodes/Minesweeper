@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">HW1_Minesweeper</string>
+    <string name="minesweeper">Minesweeper</string>
+    <string name="easy">Easy</string>
+</resources>
