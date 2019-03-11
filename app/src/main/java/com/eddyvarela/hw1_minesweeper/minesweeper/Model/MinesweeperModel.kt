@@ -6,6 +6,8 @@ import java.util.*
 //singleton object
 object MinesweeperModel{
 
+    var flagging = false
+
     var model = arrayOf(
         arrayOf(Field(0,0,false,false),
                 Field(0,0,false,false),
@@ -37,6 +39,7 @@ object MinesweeperModel{
 
     private val BOUND = model.size-1
     var gameWon = false
+    var gameLost = false
 
     fun modelToString() {
         for (i in 0..4) {
@@ -50,6 +53,39 @@ object MinesweeperModel{
         }
     }
 
+    fun isMovePossible(x:Int, y:Int, flagMode:Boolean): Boolean{
+        var movePossible = false
+
+
+        if (!flagMode){
+            model[x][y].wasClicked = true
+            if (model[x][y].type == EMPTY_SPACE){
+                movePossible = true
+            }
+        }
+
+        else if (flagMode){
+            if(model[x][y].type == EMPTY_SPACE){
+                activateBombs()
+            }
+            if (model[x][y].type == BOMB ){
+                model[x][y].isFlagged = true
+                movePossible = true
+            }
+        }
+        return movePossible
+    }
+
+
+    fun activateBombs(){
+        for (i in 0..BOUND){
+            for (j in 0..BOUND){
+                if (model[i][j].type == BOMB && (!model[i][j].isFlagged)){
+                        model[i][j].wasClicked = true
+                }
+            }
+        }
+    }
     fun resetModel(){
         for(i in 0..BOUND){
             for (j in 0..BOUND){
@@ -60,7 +96,7 @@ object MinesweeperModel{
         populateMines()
     }
 
-    private fun populateMines(){
+     fun populateMines(){
         for (i in 0..BOUND){
             for (j in 0..BOUND){
                 var bomb = Random().nextInt(100) +1
@@ -179,6 +215,10 @@ object MinesweeperModel{
             if (model[i-1][j-1].type == BOMB) count+=1
             model[i][j].minesAround = count
         }
+    }
+
+    public fun toggleFlag(){
+        flagging = !flagging
     }
 
     fun setGameBoard(){
