@@ -7,41 +7,19 @@ import java.util.*
 object MinesweeperModel{
 
     var flagging = false
-
+    var threshold= 0
     var model = arrayOf(
-        arrayOf(Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false)
-    ),  arrayOf(Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false)
-    ),  arrayOf(Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false)
-    ),  arrayOf(Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false)
-    ),  arrayOf(Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false),
-                Field(0,0,false,false)
-            )
-    )
+        arrayOf(Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false)),
+        arrayOf(Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false)),
+        arrayOf(Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false)),
+        arrayOf(Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false)),
+        arrayOf(Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false), Field(0,0,false,false)))
 
     private val BOUND = model.size-1
     var gameWon = false
     var gameLost = false
 
-    fun modelToString() {
+    private fun modelToString() {
         for (i in 0..4) {
             for (j in 0..4) {
                 var field = model[i][j]
@@ -55,12 +33,12 @@ object MinesweeperModel{
 
     fun isMovePossible(x:Int, y:Int, flagMode:Boolean): Boolean{
         var movePossible = false
-
-
         if (!flagMode){
             model[x][y].wasClicked = true
             if (model[x][y].type == EMPTY_SPACE){
                 movePossible = true
+            }else if (model[x][y].type == BOMB){
+                activateBombs()
             }
         }
 
@@ -71,13 +49,14 @@ object MinesweeperModel{
             if (model[x][y].type == BOMB ){
                 model[x][y].isFlagged = true
                 movePossible = true
+                checkWin()
             }
         }
         return movePossible
     }
 
-
-    fun activateBombs(){
+    private fun activateBombs(){
+        gameLost = true
         for (i in 0..BOUND){
             for (j in 0..BOUND){
                 if (model[i][j].type == BOMB && (!model[i][j].isFlagged)){
@@ -86,6 +65,7 @@ object MinesweeperModel{
             }
         }
     }
+
     fun resetModel(){
         for(i in 0..BOUND){
             for (j in 0..BOUND){
@@ -93,14 +73,18 @@ object MinesweeperModel{
                 model[i][j].wasClicked = false
             }
         }
+        gameLost = false
+        gameWon = false
         populateMines()
+        calculateMinesAround()
+        flagging = false
     }
 
-     fun populateMines(){
+     private fun populateMines(){
         for (i in 0..BOUND){
             for (j in 0..BOUND){
                 var bomb = Random().nextInt(100) +1
-                if (bomb >=80){
+                if (bomb >=threshold){
                     model[i][j].type = BOMB
                 }else{
                     model[i][j].type = EMPTY_SPACE
@@ -109,12 +93,13 @@ object MinesweeperModel{
         }
     }
 
-    fun calculateMinesAround(){
+    private fun calculateMinesAround(){
         checkCorners()
         checkVertRows()
         checkHorizRows()
         checkMiddleSquare()
     }
+
     private fun checkMiddleSquare(){
         for (i in 1..BOUND-1){
             for (j in 1..BOUND-1){
@@ -158,6 +143,7 @@ object MinesweeperModel{
             }
         }
     }
+
     private fun checkVertRows(){
         for (i in 1..BOUND-1){ //exclude corners
             var count = 0
@@ -182,6 +168,19 @@ object MinesweeperModel{
             }
         }
     }
+
+    fun checkWin(){
+        gameWon = true
+        for (i in 0..BOUND){
+            for (j in 0 .. BOUND){
+                if (model[i][j].type == BOMB && !model[i][j].isFlagged){
+                    gameWon = false
+                }
+            }
+        }
+
+    }
+
     private fun checkCorners(){
         if(model[0][0].type == EMPTY_SPACE) checkCornerNeighbor(0,0)
         if(model[0][BOUND].type == EMPTY_SPACE) checkCornerNeighbor(0,4)
@@ -217,11 +216,12 @@ object MinesweeperModel{
         }
     }
 
-    public fun toggleFlag(){
+    fun toggleFlag(){
         flagging = !flagging
     }
 
-    fun setGameBoard(){
+    fun setGameBoard(difficulty:Int){
+        threshold = difficulty
         populateMines()
         calculateMinesAround()
         modelToString()

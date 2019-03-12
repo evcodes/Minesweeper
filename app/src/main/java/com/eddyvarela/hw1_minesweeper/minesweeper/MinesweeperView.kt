@@ -7,10 +7,12 @@ import android.support.design.widget.Snackbar
 import android.util.AttributeSet
 import android.view.MotionEvent
 import android.view.View
+import android.widget.Toast
 import com.eddyvarela.hw1_minesweeper.R
 import com.eddyvarela.hw1_minesweeper.minesweeper.Model.BOMB
 import com.eddyvarela.hw1_minesweeper.minesweeper.Model.EMPTY_SPACE
 import com.eddyvarela.hw1_minesweeper.minesweeper.Model.MinesweeperModel
+import kotlinx.android.synthetic.main.activity_main.view.*
 
 class MinesweeperView(context: Context?, attrs: AttributeSet?) : View(context, attrs) {
 
@@ -42,7 +44,6 @@ class MinesweeperView(context: Context?, attrs: AttributeSet?) : View(context, a
         paintLine.color = Color.WHITE
         paintLine.style = Paint.Style.STROKE
         paintLine.strokeWidth = 8f
-        gameBoard.setGameBoard()
     }
 
     override fun onSizeChanged(w: Int, h: Int, oldw: Int, oldh: Int) {
@@ -142,11 +143,17 @@ class MinesweeperView(context: Context?, attrs: AttributeSet?) : View(context, a
         if (event?.action == MotionEvent.ACTION_DOWN) {
             val tX = event.x.toInt() / (width / 5)
             val tY = event.y.toInt() / (height / 5)
-            if ((tX <5 && tY<5) && !gameBoard.gameWon && !gameBoard.gameLost){
-                if (!gameBoard.isMovePossible(tY, tX, gameBoard.flagging)){
 
-                    Snackbar.make(this,"Sorry, you lost. Try again later noob", Snackbar.LENGTH_INDEFINITE).show()
+            if ((tX <5 && tY<5) && !gameBoard.gameWon && !gameBoard.gameLost){
+
+                var movePossible = gameBoard.isMovePossible(tY, tX, gameBoard.flagging)
+
+                if (!movePossible){
+                    Snackbar.make(this,"Sorry, you lost. Hit the reset button to try again", Snackbar.LENGTH_LONG).show()
                     gameBoard.gameLost = true
+                }
+                if (gameBoard.gameWon){
+                    Snackbar.make(this,"Congratulations, you\'ve won! See if you\'re as good on a harder difficulty.", Snackbar.LENGTH_LONG).show()
                 }
             }
             invalidate()

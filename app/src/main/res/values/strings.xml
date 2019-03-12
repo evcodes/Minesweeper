@@ -4,4 +4,6 @@
     <string name="easy">Easy</string>
     <string name="statusLabel">Flagging</string>
     <string name="status_string">You\'re currently playing</string>
+    <string name="reset">Reset</string>
+    <string name="font_style">monospace</string>
 </resources>

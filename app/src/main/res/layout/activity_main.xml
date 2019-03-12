@@ -7,7 +7,7 @@
         android:layout_height="match_parent"
         android:textAlignment="center"
         android:orientation="vertical"
-        tools:context=".MainActivity"
+        tools:context=".minesweeper.MainActivity"
         android:layout_margin="20dp"
         android:id="@+id/linearLayout">
 
@@ -17,6 +17,7 @@
             android:text="@string/minesweeper"
             android:gravity="center"
             android:textSize="50sp"
+            android:fontFamily="@string/font_style"
             android:id="@+id/textView"/>
 
 
@@ -27,62 +28,39 @@
             android:padding="10dp"
             android:gravity="center">
 
-    <com.eddyvarela.hw1_minesweeper.minesweeperview.MinesweeperView
-            android:layout_width="250dp"
-            android:layout_height="250dp"
-            android:layout_margin="10dp"
-            android:id="@+id/minesweeperView"
-            />
+        <com.eddyvarela.hw1_minesweeper.minesweeperview.MinesweeperView
+                android:layout_width="250dp"
+                android:layout_height="250dp"
+                android:layout_margin="10dp"
+                android:id="@+id/minesweeperView"
+        />
 
-        <LinearLayout android:layout_height="wrap_content"
-        android:layout_width="wrap_content"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        <LinearLayout
+                android:layout_height="wrap_content"
+                android:layout_width="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center">
 
-            <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-                      android:text="@string/statusLabel"
-                      android:id="@+id/statusLabel"/>
-    <ToggleButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:checked="false"
-            android:id="@+id/toggleFlag"
+            <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/statusLabel"
+                    android:id="@+id/statusLabel"/>
+            <ToggleButton
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/toggleFlag"
             />
         </LinearLayout>
 
     </LinearLayout>
 
-    <!--<LinearLayout-->
-            <!--android:layout_width="match_parent"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:orientation="horizontal">Linear-->
-    <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="@string/easy"/>-->
-
-    <!--<Button-->
-            <!--android:layout_width="89dp"-->
-            <!--android:layout_height="46dp"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="Medium"-->
-            <!--android:id="@+id/button"/>-->
-
-    <!--<Button-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_weight="1"-->
-            <!--android:text="Hard"/>-->
-
-    <!--</LinearLayout>-->
-
-    <TextView
+    <Button
+            android:id="@+id/btnReset"
             android:layout_height="wrap_content"
-            android:layout_width="match_parent"
-            android:id="@+id/tvStatus"
-            android:textSize="30sp"
-            android:textColor="@color/colorPrimary"
-            android:text="@string/status_string"
-            android:gravity="center"/>
+            android:layout_width="100dp"
+            android:layout_marginTop="50dp"
+            android:text="@string/reset"
+            android:layout_gravity="center"
+    />
 </LinearLayout>
